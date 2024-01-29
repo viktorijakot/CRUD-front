@@ -16,6 +16,12 @@ function Header() {
         >
           Student list
         </NavLink>
+        <NavLink
+          className="px-4 py-3  hover:bg-stone-500 hover:text-white"
+          to={"/edit/:studentId"}
+        >
+          Edit student
+        </NavLink>
       </header>
     </div>
   );
