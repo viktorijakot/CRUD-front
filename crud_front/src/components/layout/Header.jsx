@@ -6,6 +6,12 @@ function Header() {
       <header className=" flex justify-end items-center">
         <NavLink
           className="px-4 py-3 hover:bg-stone-500 hover:text-white"
+          to={"/home"}
+        >
+          Home
+        </NavLink>
+        <NavLink
+          className="px-4 py-3 hover:bg-stone-500 hover:text-white"
           to={"/create"}
         >
           Create new student
@@ -21,6 +27,12 @@ function Header() {
           to={"/edit/:studentId"}
         >
           Edit student
+        </NavLink>
+        <NavLink
+          className="px-4 py-3  hover:bg-stone-500 hover:text-white"
+          to={"/register"}
+        >
+          Register
         </NavLink>
       </header>
     </div>

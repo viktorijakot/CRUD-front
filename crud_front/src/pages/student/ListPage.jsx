@@ -2,11 +2,10 @@ import axios from "axios";
 import { URL_BASE } from "../../helper";
 import useApiData from "../../hooks/useApiData";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function ListPage() {
   const [studentList, setStudentList] = useApiData(`${URL_BASE}students`);
-  const navigate = useNavigate();
 
   const handleDelete = (studentId) => {
     axios
@@ -24,9 +23,6 @@ function ListPage() {
       });
   };
 
-  const handleUpdate = (studentId) => {
-    navigate(`/edit/${studentId}`);
-  };
   return (
     <div className="container flex-col p-4">
       <h1 className="text-4xl">Studentu sarasas</h1>
@@ -43,28 +39,28 @@ function ListPage() {
           </thead>
           <tbody>
             {studentList.map((studentas) => (
-              <>
-                <tr key={studentas.id} className="bg-gray-200">
-                  <td className="border px-4 py-2">{studentas.id}</td>
-                  <td className="border px-4 py-2">{studentas.firstname}</td>
-                  <td className="border px-4 py-2">{studentas.lastname}</td>
-                  <td className="border px-4 py-2">{studentas.email}</td>
-                </tr>
-                <div className="container">
-                  <button
-                    onClick={() => handleUpdate(studentas.id)}
-                    className="me-5 my-2 mx-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
+              <tr key={studentas.id} className="bg-gray-200">
+                <td className="border px-4 py-2">{studentas.id}</td>
+                <td className="border px-4 py-2">{studentas.firstname}</td>
+                <td className="border px-4 py-2">{studentas.lastname}</td>
+                <td className="border px-4 py-2">{studentas.email}</td>
+                <td className="border px-4 py-2">
+                  <Link
+                    to={`/edit/${studentas.id}`}
+                    className="cursor-pointer bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
                   >
                     Update
-                  </button>
+                  </Link>
+                </td>
+                <td className="border px-4 py-2">
                   <button
                     onClick={() => handleDelete(studentas.id)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
+                    className="bg-red-500  cursor-pointer hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
                   >
                     Delete
                   </button>
-                </div>
-              </>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>

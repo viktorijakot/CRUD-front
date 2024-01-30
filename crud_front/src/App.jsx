@@ -4,6 +4,8 @@ import { Route, Routes } from "react-router-dom";
 import ListPage from "./pages/student/ListPage";
 import CreateStudent from "./pages/student/CreateStudent";
 import EditStudent from "./pages/student/EditStudent";
+import RegisterPage from "./pages/student/RegisterPage";
+import HomePage from "./pages/student/HomePage";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Route path="/list" element={<ListPage />} />
           <Route path="/create" element={<CreateStudent />} />
           <Route path="/edit/:studentId" element={<EditStudent />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/home" element={<HomePage />} />
         </Routes>
       </div>
     </>
