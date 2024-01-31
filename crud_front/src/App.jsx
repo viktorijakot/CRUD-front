@@ -6,6 +6,7 @@ import CreateStudent from "./pages/student/CreateStudent";
 import EditStudent from "./pages/student/EditStudent";
 import RegisterPage from "./pages/student/RegisterPage";
 import HomePage from "./pages/student/HomePage";
+import LoginPage from "./pages/student/LoginPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/edit/:studentId" element={<EditStudent />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/home" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </div>
     </>

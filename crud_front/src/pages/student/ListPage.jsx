@@ -3,10 +3,11 @@ import { URL_BASE } from "../../helper";
 import useApiData from "../../hooks/useApiData";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../../store/authCtxProvider";
 
 function ListPage() {
   const [studentList, setStudentList] = useApiData(`${URL_BASE}students`);
-
+  const { isUserAdmin, isUserLoggedIn } = useAuthContext();
   const handleDelete = (studentId) => {
     axios
       .delete(`${URL_BASE}students/${studentId}`)
@@ -44,22 +45,26 @@ function ListPage() {
                 <td className="border px-4 py-2">{studentas.firstname}</td>
                 <td className="border px-4 py-2">{studentas.lastname}</td>
                 <td className="border px-4 py-2">{studentas.email}</td>
-                <td className="border px-4 py-2">
-                  <Link
-                    to={`/edit/${studentas.id}`}
-                    className="cursor-pointer bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
-                  >
-                    Update
-                  </Link>
-                </td>
-                <td className="border px-4 py-2">
-                  <button
-                    onClick={() => handleDelete(studentas.id)}
-                    className="bg-red-500  cursor-pointer hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
-                  >
-                    Delete
-                  </button>
-                </td>
+                {isUserLoggedIn && (
+                  <td className="border px-4 py-2">
+                    <Link
+                      to={`/edit/${studentas.id}`}
+                      className="cursor-pointer bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
+                    >
+                      Update
+                    </Link>
+                  </td>
+                )}
+                {isUserAdmin && (
+                  <td className="border px-4 py-2">
+                    <button
+                      onClick={() => handleDelete(studentas.id)}
+                      className="bg-red-500  cursor-pointer hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
+                    >
+                      Delete
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
