@@ -4,9 +4,11 @@ import * as Yup from "yup";
 import { URL_BASE } from "../../helper";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../store/authCtxProvider";
 
 function CreateStudent() {
   const navigate = useNavigate();
+  const { token } = useAuthContext();
   const formik = useFormik({
     initialValues: {
       firstname: "",
@@ -25,7 +27,9 @@ function CreateStudent() {
 
   const sendData = (data) => {
     axios
-      .post(`${URL_BASE}students`, data)
+      .post(`${URL_BASE}students`, data, {
+        headers: { Authorization: token },
+      })
       .then((resp) => {
         toast.success("New student was created");
         console.log("resp.data.msg ===", resp.data);

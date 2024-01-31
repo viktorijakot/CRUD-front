@@ -7,10 +7,12 @@ import { useAuthContext } from "../../store/authCtxProvider";
 
 function ListPage() {
   const [studentList, setStudentList] = useApiData(`${URL_BASE}students`);
-  const { isUserAdmin, isUserLoggedIn } = useAuthContext();
+  const { isUserAdmin, isUserLoggedIn, token } = useAuthContext();
   const handleDelete = (studentId) => {
     axios
-      .delete(`${URL_BASE}students/${studentId}`)
+      .delete(`${URL_BASE}students/${studentId}`, {
+        headers: { Authorization: token },
+      })
       .then((resp) => {
         toast.success("Student was deleted");
         console.log("resp.data.msg ===", resp.data);

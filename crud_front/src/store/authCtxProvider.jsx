@@ -24,7 +24,6 @@ export default function AuthCtxProvider({ children }) {
       user: tokenData.user,
       token: token,
     });
-    console.log("authstate ===", authState);
   }
 
   function logout() {
@@ -40,9 +39,9 @@ export default function AuthCtxProvider({ children }) {
   let isUserAdmin = false;
   if (isUserLoggedIn) {
     const tokenData = jwtDecode(authState.token);
-    isUserAdmin = !!(isUserAdmin = !!(
+    isUserAdmin = !!(
       tokenData.user.hasOwnProperty("scope") && tokenData.user.scope === "admin"
-    ));
+    );
   }
 
   const ctxValue = {

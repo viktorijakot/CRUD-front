@@ -5,9 +5,11 @@ import * as Yup from "yup";
 import { URL_BASE } from "../../helper";
 import toast from "react-hot-toast";
 import useApiData from "../../hooks/useApiData";
+import { useAuthContext } from "../../store/authCtxProvider";
 
 function EditStudent() {
   const { studentId } = useParams();
+  const { token } = useAuthContext();
   const [student, setStudent] = useApiData(`${URL_BASE}students/${studentId}`);
   console.log("student ===", student);
   const navigate = useNavigate();
@@ -30,7 +32,9 @@ function EditStudent() {
 
   const sendPutData = (data) => {
     axios
-      .put(`${URL_BASE}students/${studentId}`, data)
+      .put(`${URL_BASE}students/${studentId}`, data, {
+        headers: { Authorization: token },
+      })
       .then((resp) => {
         toast.success("New student was updated");
         console.log("resp.data.msg ===", resp.data);
