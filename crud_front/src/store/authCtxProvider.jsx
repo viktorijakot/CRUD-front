@@ -40,9 +40,9 @@ export default function AuthCtxProvider({ children }) {
   let isUserAdmin = false;
   if (isUserLoggedIn) {
     const tokenData = jwtDecode(authState.token);
-    isUserAdmin = !!(
-      tokenData.hasOwnProperty("scope") && tokenData.scope === "admin"
-    );
+    isUserAdmin = !!(isUserAdmin = !!(
+      tokenData.user.hasOwnProperty("scope") && tokenData.user.scope === "admin"
+    ));
   }
 
   const ctxValue = {
