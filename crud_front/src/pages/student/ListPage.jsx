@@ -4,6 +4,7 @@ import useApiData from "../../hooks/useApiData";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../store/authCtxProvider";
+import { useMemo, useState } from "react";
 
 function ListPage() {
   const [studentList, setStudentList] = useApiData(`${URL_BASE}students`);
@@ -25,10 +26,33 @@ function ListPage() {
         toast.error(error.response.data.error);
       });
   };
+  const [filterValue, setFilterValue] = useState("");
+
+  const filterStudents = useMemo(() => {
+    return studentList.filter(
+      (student) =>
+        student.firstname.toLowerCase().includes(filterValue.toLowerCase()) ||
+        student.lastname.toLowerCase().includes(filterValue.toLowerCase()) ||
+        student.email.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }, [studentList, filterValue]);
+
+  const handleChange = (event) => {
+    setFilterValue(event.target.value);
+  };
 
   return (
     <div className="container flex-col p-4">
       <h1 className="text-4xl">Studentu sarasas</h1>
+      <div className="mt-5">
+        <input
+          type="text"
+          onChange={handleChange}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Search"
+          value={filterValue}
+        />
+      </div>
 
       <div className="mt-5">
         <table className="min-w-full table-auto">
@@ -41,7 +65,7 @@ function ListPage() {
             </tr>
           </thead>
           <tbody>
-            {studentList.map((studentas) => (
+            {filterStudents.map((studentas) => (
               <tr key={studentas.id} className="bg-gray-200">
                 <td className="border px-4 py-2">{studentas.id}</td>
                 <td className="border px-4 py-2">{studentas.firstname}</td>
