@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 const AuthContext = createContext({
   email: "",
   user: {},
+  userId: "",
   token: "",
   login(email, token) {},
   logout() {},
@@ -14,6 +15,7 @@ export default function AuthCtxProvider({ children }) {
   const [authState, setAuthState] = useState({
     email: "",
     user: {},
+    userId: "",
     token: "",
   });
 
@@ -22,6 +24,7 @@ export default function AuthCtxProvider({ children }) {
     setAuthState({
       email: email,
       user: tokenData.user,
+      userId: tokenData.user.id,
       token: token,
     });
   }
@@ -30,6 +33,7 @@ export default function AuthCtxProvider({ children }) {
     setAuthState({
       email: "",
       user: {},
+      userId: "",
       token: "",
     });
   }
@@ -49,6 +53,7 @@ export default function AuthCtxProvider({ children }) {
     isUserAdmin,
     token: authState.token,
     email: authState.email,
+    userId: authState.userId,
     user: authState.user,
     login,
     logout,

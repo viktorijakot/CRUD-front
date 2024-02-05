@@ -24,9 +24,9 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="user-create" element={<UserCreate />} />
-          <Route path="user-list" element={<UserList />} />
-          <Route path="user-edit" element={<UserEdit />} />
+          <Route path="/user-create" element={<UserCreate />} />
+          <Route path="/user-list" element={<UserList />} />
+          <Route path="/user-edit/:id" element={<UserEdit />} />
         </Routes>
       </div>
     </>

@@ -1,24 +1,30 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useAuthContext } from "../store/authCtxProvider";
 
-function useApiData(url, initValues = []) {
-  const [dataArray, setDataArray] = useState(initValues);
+export default function useApiData(apiUrl, initValue = []) {
+  const [dataArray, setDataArray] = useState(initValue);
   const [apiError, setApiError] = useState({});
+
+  const { token } = useAuthContext();
+
+  let configs = {};
+  if (token !== "") {
+    configs = {
+      headers: { Authorization: token },
+    };
+  }
 
   useEffect(() => {
     axios
-      .get(url)
-      .then((resp) => {
-        console.log("get data resp ===", resp.data);
-        setDataArray(resp.data);
+      .get(apiUrl, configs)
+      .then((response) => {
+        setDataArray(response.data);
       })
       .catch((error) => {
-        console.warn(error);
         setApiError(error);
       });
-  }, [url]);
+  }, [apiUrl]);
 
   return [dataArray, setDataArray, apiError];
 }
-
-export default useApiData;

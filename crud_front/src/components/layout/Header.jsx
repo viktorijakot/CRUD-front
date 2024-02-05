@@ -3,7 +3,7 @@ import { useAuthContext } from "../../store/authCtxProvider";
 import toast from "react-hot-toast";
 
 function Header() {
-  const { isUserLoggedIn, logout } = useAuthContext();
+  const { isUserLoggedIn, logout, isUserAdmin } = useAuthContext();
   const navigate = useNavigate();
   function handleLogout() {
     logout();
@@ -21,12 +21,30 @@ function Header() {
           Home
         </NavLink>
         {isUserLoggedIn && (
-          <NavLink
-            className="px-4 py-3 hover:bg-stone-500 hover:text-white"
-            to={"/create"}
-          >
-            Create new student
-          </NavLink>
+          <>
+            <NavLink
+              className="px-4 py-3 hover:bg-stone-500 hover:text-white"
+              to={"/create"}
+            >
+              Create new student
+            </NavLink>
+            {isUserAdmin && (
+              <>
+                <NavLink
+                  className="px-4 py-3 hover:bg-stone-500 hover:text-white"
+                  to={"/user-list"}
+                >
+                  Users list
+                </NavLink>
+                <NavLink
+                  className="px-4 py-3 hover:bg-stone-500 hover:text-white"
+                  to={"/user-create"}
+                >
+                  Create User
+                </NavLink>
+              </>
+            )}
+          </>
         )}
         <NavLink
           className="px-4 py-3  hover:bg-stone-500 hover:text-white"
