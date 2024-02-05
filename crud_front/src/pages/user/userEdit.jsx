@@ -15,23 +15,25 @@ export default function UserEdit() {
 
   const navigate = useNavigate();
 
-  const [student, setStudent] = useApiData(`${URL_BASE}user/${id}`) ?? {
-    firstname: "",
-    lastname: "",
+  const [user, setUser] = useApiData(`${URL_BASE}user/${id}`) ?? {
     email: "",
+    scope: "",
+    verified: false,
   };
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      firstname: student.firstname ?? "",
-      lastname: student.lastname ?? "",
-      email: student.email ?? "",
+      email: user.email ?? "",
+      password: "",
+      scope: user.scope ?? "",
+      verified: user.verified ?? false,
     },
     validationSchema: Yup.object({
-      firstname: Yup.string().min(3).max(64).required(),
-      lastname: Yup.string().min(3).max(64).required(),
-      email: Yup.string().email().min(3).max(128).required(),
+      email: Yup.string().email().min(3).max(64).required(),
+      password: Yup.string().min(3).max(64).optional(),
+      scope: Yup.string().min(3).max(64).required(),
+      verified: Yup.bool(),
     }),
     onSubmit: (values) => {
       sendPutData(values);
@@ -40,12 +42,12 @@ export default function UserEdit() {
 
   function sendPutData(data) {
     axios
-      .put(`${URL_BASE}students/${id}`, data, {
+      .put(`${URL_BASE}user/${id}`, data, {
         headers: { Authorization: token },
       })
       .then((response) => {
         navigate("/user-list");
-        toast.success("Studento informacija sėkmingai atnaujinta!");
+        toast.success("Vartotojo informacija sėkmingai atnaujinta!");
       })
       .catch((error) => {
         toast.error(error.response.data.error);
@@ -54,51 +56,9 @@ export default function UserEdit() {
 
   return (
     <div className="container flex-col mx-auto mt-5">
-      <h1 className="text-3xl my-5">
-        Redaguoti vartotoja {student.firstname} {student.lastname}
-      </h1>
-      <p className="my-5">Esamo studento redagavimo puslapis</p>
+      <h1 className="text-3xl my-5">Vartotojo redagavimas</h1>
+
       <form className="w-full mx-auto max-w-sm" onSubmit={formik.handleSubmit}>
-        <div className="mb-8">
-          <label
-            htmlFor="firstname"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Vardas
-          </label>
-          <input
-            type="text"
-            id="firstname"
-            name="firstname"
-            value={formik.values.firstname}
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-          {formik.touched["firstname"] && formik.errors["firstname"] && (
-            <p className="text-red-600">{formik.errors["firstname"]}</p>
-          )}
-        </div>
-        <div className="mb-8">
-          <label
-            htmlFor="lastname"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Pavardė
-          </label>
-          <input
-            type="text"
-            id="lastname"
-            name="lastname"
-            value={formik.values.lastname}
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-          {formik.touched["lastname"] && formik.errors["lastname"] && (
-            <p className="text-red-600">{formik.errors["lastname"]}</p>
-          )}
-        </div>
         <div className="mb-8">
           <label
             htmlFor="email"
@@ -110,7 +70,7 @@ export default function UserEdit() {
             type="email"
             id="email"
             name="email"
-            value={formik.values.email}
+            value={formik.values["email"]}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -119,12 +79,75 @@ export default function UserEdit() {
             <p className="text-red-600">{formik.errors["email"]}</p>
           )}
         </div>
+        <div className="mb-8">
+          <label
+            htmlFor="password"
+            className="block text-gray-700 text-sm font-bold mb-2"
+          >
+            Slaptažodis
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formik.values["password"]}
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+          {formik.touched["password"] && formik.errors["password"] && (
+            <p className="text-red-600">{formik.errors["password"]}</p>
+          )}
+        </div>
+        <div className="mb-8">
+          <label
+            htmlFor="scope"
+            className="block text-gray-700 text-sm font-bold mb-2"
+          >
+            Rolė
+          </label>
+          <select
+            name="scope"
+            id="scope"
+            // options={options}
+            value={formik.values["scope"]}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="Pasirinkite role"
+            className="rounded w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          >
+            <option value="manager">Manager</option>
+            <option value="admin">Admin</option>
+          </select>
+          {formik.touched["scope"] && formik.errors["scope"] && (
+            <p className="text-red-600">{formik.errors["scope"]}</p>
+          )}
+        </div>
+        <div className="mb-8">
+          <label
+            htmlFor="verified"
+            className="block text-gray-700 text-sm font-bold mb-2"
+          >
+            Vartotojas patvirtintas
+          </label>
+          <input
+            type="checkbox"
+            id="verified"
+            name="verified"
+            value="1"
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+          />
+          {formik.touched["verified"] && formik.errors["verified"] && (
+            <p className="text-red-600">{formik.errors["verified"]}</p>
+          )}
+        </div>
         <div className="flex items-center justify-center">
           <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Atnaujinti
+            Update
           </button>
         </div>
       </form>
